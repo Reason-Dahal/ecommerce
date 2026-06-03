@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dns from "dns";
 dns.setServers(['8.8.8.8']);
 import { connectDB } from "./db/dbConfig.js";
+import userRouter from "./route/userRoute.js";
 
 
 const app = express();
@@ -14,6 +15,8 @@ dotenv.config();
 // .catch((e)=>console.log("error ocured",e))
 
 connectDB();
+app.use(express.json());
+app.use("/api/v1/user", userRouter);
 
 app.get("/",(req,res)=>{
     res.send("hellow");
