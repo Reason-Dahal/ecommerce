@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import dns from "dns";
+import cors from "cors";
 dns.setServers(['8.8.8.8']);
 import { connectDB } from "./db/dbConfig.js";
 import userRouter from "./route/userRoute.js";
@@ -16,7 +17,9 @@ dotenv.config();
 
 connectDB();
 app.use(express.json());
+app.use(cors());
 app.use("/api/v1/user", userRouter);
+
 
 app.get("/",(req,res)=>{
     res.send("hellow");
