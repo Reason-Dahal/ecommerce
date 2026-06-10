@@ -30,3 +30,27 @@ export const getMyOrder = async (req, res) => {
     console.error(error);
   }
 };
+
+// @desc    Get all orders (Admin only)
+exports.getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({}).populate("user", "id name email");
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update order status (Admin only)
+exports.updateOrderStatus = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) throw new Error("Order not found");
+
+    order.status = req.body.status || order.status;
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } catch (error) {
+    next(error);
+  }
+};
