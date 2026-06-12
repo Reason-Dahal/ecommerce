@@ -1,13 +1,14 @@
 import jsonwebtoken from "jsonwebtoken";
-import User from "../model/userModel";
+import User from "../model/userModel.js";
 
 export const protect = async (req,res,next)=>{
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
 
         try {
-            token = req.headers.authorization.split('')[1];
+            token = req.headers.authorization.split(' ')[1];
             const decode = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+           
 
             req.user = await User.findById(decode.id).select("-Password");
             next();
@@ -20,7 +21,7 @@ export const protect = async (req,res,next)=>{
     }
 };
 
-export const admin = async(req,res)=>{
+export const admin = async(req,res, next)=>{
     if(req.user && req.user.role === 'admin'){
         next();
     }

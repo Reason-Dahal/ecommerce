@@ -28,7 +28,7 @@ export const viewAllProduct = async(req,res)=>{
 export const viewProductById = async(req,res)=>{
     const {id} = req.params;
     const product = await Product.findById(id);
-    res.status(200).send({message:"product fetched by id"});
+    res.status(200).send({message:"product fetched by id",product});
 }
 
 export const updateProduct = async(req,res)=>{

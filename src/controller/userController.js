@@ -33,43 +33,37 @@ export const registerUser = async(req,res)=>{
 
 }
 
-export const loginUser = async (req,res) =>{
+export const loginUser = async (req, res) => {
     try {
-        const {email,password} = req.body;
-        if(!email || !password){
-            return res.status(404).send({message:"please enter all the feild"});
-        }
-        const user = await User.findOne({email:email});
-        if(!user){
-            return res.status(404).send({message:"user doesn't exist"});
-        }
-        
-        const isPassworMatched = await bcrypt.compare(password,user.password);
-
-        const token = jsonwebtoken.sign({
-            id: user._id,
-            email:email,
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(404).send({ message: "please enter all the fields" });
+      }
+      const user = await User.findOne({ email: email });
+      if (!user) {
+        return res.status(404).send({ message: "user doesn't exist" });
+      }
+  
+      const isPasswordMatched = await bcrypt.compare(password, user.password);
+  
+      const token = jsonwebtoken.sign(
+        {
+          id: user._id,
+          email: email,
+          role: user.role, // ✅ role included
         },
         process.env.JWT_SECRET,
-        {
-            expiresIn : "3d"
-        }
-    
-    )
-        
-
-        if(isPassworMatched){
-            return res.status(200).send({ message: "login sucessful",user:user,token});
-        }
-        else{
-            return res.status(400).send("login failed");
-        }
-
-
-
+        { expiresIn: "3d" }
+      );
+  
+      if (isPasswordMatched) {
+        return res.status(200).send({ message: "login successful", user, token });
+      } else {
+        return res.status(400).send("login failed");
+      }
     } catch (error) {
-        console.error(error);
-        
+      console.error(error);
     }
-}
+  };
+  
 
