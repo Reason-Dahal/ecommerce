@@ -2,9 +2,10 @@
 import Product from "../model/productModel.js";
 
 export const  addProduct = async (req,res)=>{
-    const{name,price,stock,category,url} = req.body;
+    const{name,price,stock,category} = req.body;
+    
 
-    if(!name || !price || !stock || !category || !url){
+    if(!name || !price || !stock || !category ){
         return res.status(400).send({message:"please enter all the feid"});
     }
     const product= new Product({
@@ -12,7 +13,7 @@ export const  addProduct = async (req,res)=>{
         price:price,
         stock:stock,
         category:category,
-        url:url
+        url: req.file ? req.file.filename : null
     });
 
    await product.save();
