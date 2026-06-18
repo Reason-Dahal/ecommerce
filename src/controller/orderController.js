@@ -36,7 +36,7 @@ export const getMyOrder = async (req, res) => {
 export const getAllOrder = async (req, res, next) => {
   try {
     const orders = await Order.find({})
-      .populate("user", "id name email")
+      .populate("user", "id username email")
       .populate("orderItem.productRef");
     res.json({ message: "all order", orders });
   } catch (error) {
