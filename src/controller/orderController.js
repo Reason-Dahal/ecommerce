@@ -23,26 +23,26 @@ const order = new Order({
     }
 }
 
-export const getMyOrder = async(req,res)=>{
-    try {
-        const orders = await Order.find({user:req.user._id});
-        res.json({ message: "Your all order" , orders});
-        
-    } catch (error) {
-        console.log(error);
-        
-    }
-
-}
+export const getMyOrder = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .populate("orderItem.productRef");
+    res.json({ message: "Your all order", orders });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const getAllOrder = async (req, res, next) => {
-    try {
-      const orders = await Order.find({}).populate("user", "id name email") .populate("items.productRef");
-      res.json({message:"all order",orders});
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  try {
+    const orders = await Order.find({})
+      .populate("user", "id name email")
+      .populate("orderItem.productRef");
+    res.json({ message: "all order", orders });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   export const updateOrderStatus = async (req, res, next) => {
     try {
