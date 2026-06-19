@@ -31,3 +31,10 @@ app.get("/",(req,res)=>{
 app.listen(3000,()=>{
     console.log("running on 3000")
 })
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+      message: err.message || "Internal Server Error",
+    });
+  });
