@@ -1,25 +1,24 @@
 
 import Product from "../model/productModel.js";
 
-export const  addProduct = async (req,res)=>{
-    const{name,price,stock,category} = req.body;
-    
-
-    if(!name || !price || !stock || !category ){
-        return res.status(400).send({message:"please enter all the feid"});
+export const addProduct = async (req, res) => {
+    const { name, price, stock, category } = req.body;
+  
+    if (!name || !price || !stock || !category) {
+      return res.status(400).send({ message: "please enter all the field" });
     }
-    const product= new Product({
-        name:name,
-        price:price,
-        stock:stock,
-        category:category,
-        url: req.file ? req.file.filename : null
+  
+    const product = new Product({
+      name,
+      price,
+      stock,
+      category,
+      url: req.file ? req.file.path : null, // Cloudinary's secure URL
     });
-
-   await product.save();
-   res.status(201).send({message:"Product added sucessfully",product});
-
-}
+  
+    await product.save();
+    res.status(201).send({ message: "Product added successfully", product });
+  };
 
 export const viewAllProduct = async(req,res)=>{
     const product = await Product.find();
